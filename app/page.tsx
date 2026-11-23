@@ -1,8 +1,9 @@
 import Image from "next/image";
-import { ArrowDown, ArrowRight, ArrowUpRight, BadgeCheck, Droplets, History, Leaf, MapPin, Phone, Quote, ShieldCheck, Wind } from "lucide-react";
-import { Header } from "@/components/header";
+import Link from "next/link";
+import { ArrowDown, ArrowRight, BadgeCheck, Droplets, History, Leaf, MapPin, ShieldCheck, Wind } from "lucide-react";
+import { Testimonials } from "@/components/testimonials";
 import { QuoteLink } from "@/components/quote-link";
-import { categories, clients, contact, officialSite, testimonials } from "@/content/site";
+import { categories, clients } from "@/content/site";
 
 const categoryPhotos = {
   higienizacao: { width: 288, height: 400, alt: "Profissional higienizando um sofá com equipamento de extração" },
@@ -26,203 +27,148 @@ const benefits = [
 
 export default function Home() {
   return (
-    <>
-      <Header />
-      <main id="conteudo" tabIndex={-1}>
-        <section className="hero" id="inicio" aria-labelledby="titulo">
-          <div className="shell hero-grid">
-            <div className="hero-copy">
-              <p className="eyebrow"><MapPin size={15} aria-hidden="true" /> Curitiba, PR</p>
-              <h1 id="titulo">Limpeza e blindagem <span>de estofados</span></h1>
-              <p>Agende a limpeza do seu estofado com a Sofá Novo de Novo. Conte com a nossa tecnologia de secagem turbo.</p>
-              <div className="hero-actions">
-                <QuoteLink />
-                <a className="text-link hero-link" href="#servicos">Conhecer serviços <ArrowDown size={17} aria-hidden="true" /></a>
-              </div>
-            </div>
-            <div className="hero-media">
-              <Image
-                src="/media/embaixador.webp"
-                alt="Dr. Bactéria, embaixador oficial da Sofá Novo de Novo, com equipamentos de limpeza"
-                width={1024}
-                height={923}
-                preload
-                sizes="(min-width: 75rem) 520px, (min-width: 48rem) 45vw, 90vw"
-              />
+    <main id="conteudo" className="home-page" tabIndex={-1}>
+      <section className="hero" id="inicio" aria-labelledby="titulo">
+        <div className="shell hero-grid">
+          <div className="hero-copy">
+            <p className="eyebrow"><MapPin size={15} aria-hidden="true" /> Curitiba, PR</p>
+            <h1 id="titulo">Limpeza e blindagem <span>de estofados</span></h1>
+            <p>Agende a limpeza do seu estofado com a Sofá Novo de Novo. Conte com a nossa tecnologia de secagem turbo.</p>
+            <div className="hero-actions">
+              <QuoteLink />
+              <a className="text-link hero-link" href="#servicos">Conhecer serviços <ArrowDown size={17} aria-hidden="true" /></a>
             </div>
           </div>
-        </section>
-
-        <section className="highlights" aria-label="Diferenciais da Sofá Novo de Novo">
-          <ul className="shell highlights-grid">
-            {highlights.map(({ icon: Icon, title }) => (
-              <li key={title}><Icon size={22} aria-hidden="true" /> <span>{title}</span></li>
-            ))}
-          </ul>
-        </section>
-
-        <section className="section shell" id="servicos" aria-labelledby="servicos-titulo">
-          <div className="section-heading">
-            <p className="eyebrow">Serviços</p>
-            <h2 id="servicos-titulo">O que fazemos</h2>
-            <p>Limpeza e proteção para a casa, a empresa e o seu veículo.</p>
+          <div className="hero-media">
+            <Image
+              src="/media/embaixador.webp"
+              alt="Dr. Bactéria, embaixador oficial da Sofá Novo de Novo, com equipamentos de limpeza"
+              width={1024}
+              height={923}
+              preload
+              sizes="(min-width: 75rem) 520px, (min-width: 48rem) 45vw, 90vw"
+            />
           </div>
-          <div className="cards-grid">
-            {categories.map(({ id, title, summary }) => (
-              <article className="service-card" key={id}>
-                <div className="card-photo">
-                  <Image src={`/media/${id}.webp`} alt="" fill sizes="(min-width: 64rem) 23vw, (min-width: 36rem) 45vw, 90vw" />
-                </div>
-                <div className="card-copy">
-                  <h3>{title}</h3>
-                  <p>{summary}</p>
-                  <a className="text-link" href={`#${id}`} aria-label={`Saiba mais sobre ${title}`}>
-                    Saiba mais <ArrowRight size={17} aria-hidden="true" />
-                  </a>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="clients-section section" aria-labelledby="clientes-titulo">
-          <div className="shell">
-            <div className="section-heading centered">
-              <h2 id="clientes-titulo">Nossos clientes</h2>
-            </div>
-            <ul className="client-grid">
-              {clients.map(([name, image]) => (
-                <li key={image}>
-                  <Image src={`/clientes/${image}.webp`} alt={name} width={128} height={128} sizes="96px" />
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
+      <section className="highlights" aria-label="Diferenciais da Sofá Novo de Novo">
+        <ul className="shell highlights-grid">
+          {highlights.map(({ icon: Icon, title }) => (
+            <li key={title}><Icon size={22} aria-hidden="true" /> <span>{title}</span></li>
+          ))}
+        </ul>
+      </section>
 
-        <div className="section shell detail-stack">
-          {categories.map(({ id, title, description, services }, index) => (
-            <section id={id} className="service-detail" data-reverse={index % 2 === 1} key={id} aria-labelledby={`${id}-titulo`}>
-              <div className="detail-photo">
-                <Image
-                  src={`/media/${id}.webp`}
-                  {...categoryPhotos[id]}
-                  sizes="(min-width: 74rem) 420px, (min-width: 48rem) 45vw, 85vw"
-                />
+      <section className="section shell" id="servicos" aria-labelledby="servicos-titulo">
+        <div className="section-heading">
+          <p className="eyebrow">Serviços</p>
+          <h2 id="servicos-titulo">O que fazemos</h2>
+          <p>Limpeza e proteção para a casa, a empresa e o seu veículo.</p>
+        </div>
+        <div className="cards-grid">
+          {categories.map(({ id, title, summary, services }) => (
+            <article className="service-card" key={id}>
+              <div className="card-photo">
+                <Image src={`/media/${id}.webp`} alt="" fill sizes="(min-width: 64rem) 23vw, (min-width: 36rem) 45vw, 90vw" />
               </div>
-              <div className="detail-copy">
-                <h2 id={`${id}-titulo`}>{title}</h2>
-                <p>{description}</p>
-                <ul className="service-links">
-                  {services.map(({ label, url }) => (
-                    <li key={url}><a href={url}>{label}<ArrowUpRight size={16} aria-hidden="true" /></a></li>
-                  ))}
-                </ul>
-                <QuoteLink />
+              <div className="card-copy">
+                <h3>{title}</h3>
+                <p>{summary}</p>
+                <a className="text-link" href={`#${id}`} aria-label={`Ver ${services.length} serviços de ${title.toLowerCase()}`}>
+                  {services.length} serviços <ArrowRight size={17} aria-hidden="true" />
+                </a>
               </div>
-            </section>
+            </article>
           ))}
         </div>
+      </section>
 
-        <section className="section testimonials-section" aria-labelledby="depoimentos-titulo">
-          <div className="shell">
-            <div className="section-heading">
-              <h2 id="depoimentos-titulo">O que nossos clientes dizem</h2>
-              <p>Depoimentos publicados no <a href={officialSite}>site oficial</a>.</p>
-            </div>
-            <div className="testimonial-grid">
-              {testimonials.map(({ name, quote }) => (
-                <figure className="testimonial" key={name}>
-                  <Quote size={26} aria-hidden="true" />
-                  <blockquote><p>{quote}</p></blockquote>
-                  <figcaption>{name}</figcaption>
-                </figure>
-              ))}
-            </div>
+      <section className="clients-section section" aria-labelledby="clientes-titulo">
+        <div className="shell">
+          <div className="section-heading centered">
+            <h2 id="clientes-titulo">Nossos clientes</h2>
           </div>
-        </section>
-
-        <section className="section shell" aria-labelledby="diferenciais-titulo">
-          <div className="section-heading">
-            <h2 id="diferenciais-titulo">Por que escolher a Sofá Novo de Novo?</h2>
-          </div>
-          <div className="benefit-grid">
-            {benefits.map(({ icon: Icon, title, description }) => (
-              <article className="benefit" key={title}>
-                <Icon size={24} aria-hidden="true" />
-                <h3>{title}</h3>
-                <p>{description}</p>
-              </article>
+          <ul className="client-grid">
+            {clients.map(([name, image]) => (
+              <li key={image}>
+                <Image src={`/clientes/${image}.webp`} alt={name} width={128} height={128} sizes="96px" />
+              </li>
             ))}
-          </div>
-        </section>
+          </ul>
+        </div>
+      </section>
 
-        <section className="about-section section" id="sobre" aria-labelledby="sobre-titulo">
-          <div className="shell about-grid">
-            <Image
-              src="/media/sobre.webp"
-              alt="Equipe da Sofá Novo de Novo reunida em frente à empresa em Curitiba"
-              width={730}
-              height={492}
-              sizes="(min-width: 74rem) 540px, (min-width: 48rem) 48vw, 90vw"
-            />
-            <div>
-              <p className="eyebrow">Sobre nós</p>
-              <h2 id="sobre-titulo">Sofá Novo de Novo</h2>
-              <p>A Sofá Novo de Novo atua em Curitiba com limpeza e impermeabilização de estofados. A equipe utiliza equipamentos profissionais e produtos ecológicos.</p>
-              <p>O processo de blindagem da empresa utiliza nanotecnologia para proteger o tecido e preservar suas características originais, como textura e cor.</p>
+      <div className="section shell detail-stack">
+        {categories.map(({ id, title, description, services }, index) => (
+          <section id={id} className="service-detail" data-reverse={index % 2 === 1} key={id} aria-labelledby={`${id}-titulo`}>
+            <div className="detail-photo">
+              <Image
+                src={`/media/${id}.webp`}
+                {...categoryPhotos[id]}
+                sizes="(min-width: 74rem) 420px, (min-width: 48rem) 45vw, 85vw"
+              />
+            </div>
+            <div className="detail-copy">
+              <h2 id={`${id}-titulo`}>{title}</h2>
+              <p>{description}</p>
+              <ul className="service-links">
+                {services.map(({ label, url }) => (
+                  <li key={url}><Link href={url}>{label}<ArrowRight size={16} aria-hidden="true" /></Link></li>
+                ))}
+              </ul>
               <QuoteLink />
             </div>
-          </div>
-        </section>
+          </section>
+        ))}
+      </div>
 
-        <section className="contact-band" aria-labelledby="contato-titulo">
-          <Image src="/media/banner.webp" alt="" fill sizes="100vw" />
-          <div className="shell contact-band-inner">
-            <div>
-              <p className="eyebrow"><Droplets size={17} aria-hidden="true" /> Limpeza e blindagem em Curitiba</p>
-              <h2 id="contato-titulo">Vamos cuidar do seu estofado?</h2>
-            </div>
+      <Testimonials />
+
+      <section className="section shell" aria-labelledby="diferenciais-titulo">
+        <div className="section-heading">
+          <h2 id="diferenciais-titulo">Por que escolher a Sofá Novo de Novo?</h2>
+        </div>
+        <div className="benefit-grid">
+          {benefits.map(({ icon: Icon, title, description }) => (
+            <article className="benefit" key={title}>
+              <Icon size={24} aria-hidden="true" />
+              <h3>{title}</h3>
+              <p>{description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="about-section section" id="sobre" aria-labelledby="sobre-titulo">
+        <div className="shell about-grid">
+          <Image
+            src="/media/sobre.webp"
+            alt="Equipe da Sofá Novo de Novo reunida em frente à empresa em Curitiba"
+            width={730}
+            height={492}
+            sizes="(min-width: 74rem) 540px, (min-width: 48rem) 48vw, 90vw"
+          />
+          <div>
+            <p className="eyebrow">Sobre nós</p>
+            <h2 id="sobre-titulo">Sofá Novo de Novo</h2>
+            <p>A Sofá Novo de Novo atua em Curitiba com limpeza e impermeabilização de estofados. A equipe utiliza equipamentos profissionais e produtos ecológicos.</p>
+            <p>O processo de blindagem da empresa utiliza nanotecnologia para proteger o tecido e preservar suas características originais, como textura e cor.</p>
             <QuoteLink />
           </div>
-        </section>
-      </main>
-
-      <footer className="footer">
-        <div className="shell">
-          <div className="footer-grid">
-            <div>
-              <a href="#inicio" className="brand-link">
-                <Image src="/brand/logo.png" alt="Sofá Novo de Novo" width={120} height={56} />
-              </a>
-            </div>
-            <div>
-              <h2>Serviços</h2>
-              <ul>
-                {categories.map(({ id, title }) => <li key={id}><a href={`#${id}`}>{title}</a></li>)}
-              </ul>
-            </div>
-            <div>
-              <h2>Contato</h2>
-              <address>
-                <a href={contact.phoneUrl}><Phone size={16} aria-hidden="true" /> {contact.phone}</a>
-                <a href={contact.mapUrl}><MapPin size={17} aria-hidden="true" /> {contact.address}</a>
-              </address>
-              <QuoteLink className="footer-quote">Chamar no WhatsApp</QuoteLink>
-            </div>
-            <div>
-              <h2>Redes sociais</h2>
-              <ul>
-                {contact.social.map(({ label, url }) => <li key={url}><a href={url}>{label}</a></li>)}
-              </ul>
-            </div>
-          </div>
-          <div className="footer-legal">
-            <p>{contact.company} · CNPJ {contact.registration}</p>
-            <p>Site original por <a href="https://igniscriativa.com.br/">Ignis Criativa</a></p>
-          </div>
         </div>
-      </footer>
-    </>
+      </section>
+
+      <section className="contact-band" aria-labelledby="contato-titulo">
+        <Image src="/media/banner.webp" alt="" fill sizes="100vw" />
+        <div className="shell contact-band-inner">
+          <div>
+            <p className="eyebrow"><Droplets size={17} aria-hidden="true" /> Limpeza e blindagem em Curitiba</p>
+            <h2 id="contato-titulo">Vamos cuidar do seu estofado?</h2>
+          </div>
+          <QuoteLink />
+        </div>
+      </section>
+    </main>
   );
 }

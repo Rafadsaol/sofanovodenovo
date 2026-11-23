@@ -1,0 +1,293 @@
+/* Shared navigation */
+.dropdown .category-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: .3rem;
+  padding: .8rem .7rem;
+  background: var(--tint);
+  font-family: var(--font-heading);
+  font-size: 1rem;
+}
+.dropdown a[aria-current="page"], .mobile-links a[aria-current="page"] {
+  background: var(--tint);
+  font-weight: 600;
+}
+.dropdown-services a { min-height: 2.75rem; }
+.footer-brand p { margin-top: .75rem; max-width: 24ch; font-size: .8rem; }
+
+html:has(.mobile-menu[open]) { overflow: hidden; }
+.mobile-menu {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: min(100%, 29rem);
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  background: white;
+  color: var(--color-brand-dark);
+  overflow: hidden;
+}
+.mobile-menu[open] { animation: drawer-in 250ms ease both; }
+.mobile-menu::backdrop { background: color-mix(in srgb, var(--color-brand-dark) 58%, transparent); }
+.mobile-panel { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; height: 100%; }
+.mobile-heading, .mobile-quote { padding: .9rem 1rem; }
+.mobile-heading { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); }
+.mobile-quote { border-top: 1px solid var(--line); padding-bottom: max(.9rem, env(safe-area-inset-bottom)); }
+.mobile-quote .button { width: 100%; }
+.mobile-links { padding: .65rem 1rem; overflow-y: auto; overscroll-behavior: contain; }
+.mobile-links details { border-bottom: 1px solid var(--line); }
+.mobile-links ul { display: grid; gap: .2rem; padding-bottom: .6rem; }
+.mobile-links summary, .mobile-about {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  min-height: 3.2rem;
+  padding: .7rem .4rem;
+}
+.mobile-links summary, .faq-entries summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  list-style: none;
+  cursor: pointer;
+}
+.mobile-links summary::-webkit-details-marker, .faq-entries summary::-webkit-details-marker { display: none; }
+.mobile-links details[open] summary, .mobile-links summary:hover { color: var(--color-brand-dark); background: var(--tint); }
+.mobile-links li a, .mobile-about { display: flex; align-items: center; border-radius: .4rem; }
+.mobile-links li a { min-height: 2.85rem; padding: .45rem .75rem; font-size: .87rem; }
+.mobile-links li a:hover, .mobile-about:hover { background: var(--tint); }
+.mobile-links summary svg, .faq-entries summary svg { transition: rotate 220ms ease; }
+.mobile-links details[open] summary svg, .faq-entries details[open] summary svg { rotate: 180deg; }
+@keyframes drawer-in {
+  from { translate: 100% 0; }
+  to { translate: 0; }
+}
+
+/* The home retains the approved sections and adds clearer routes into services. */
+.home-page .hero-grid { gap: clamp(1rem, 3vw, 4rem); }
+.home-page .hero-media::before {
+  inset: 10% 5% 7%;
+  border: 1px solid color-mix(in srgb, var(--color-brand) 31%, transparent);
+  border-radius: 46% 46% 12% 12%;
+  background: radial-gradient(ellipse at 50% 65%, color-mix(in srgb, var(--color-brand-mid) 30%, transparent), transparent 72%);
+}
+.home-page .card-photo { aspect-ratio: 1.48; }
+.home-page .card-copy { padding: clamp(1.15rem, 2vw, 1.55rem); }
+.home-page .card-copy .text-link { width: 100%; justify-content: space-between; border-top: 1px solid var(--line); margin-top: auto; padding-top: .4rem; }
+.home-page .service-detail { border-top: 1px solid var(--line); padding-top: clamp(1.5rem, 4vw, 3rem); }
+.home-page .service-links a { padding-inline: .85rem; }
+.home-page .benefit { border-top: 3px solid var(--color-brand); }
+
+/* Service pages */
+.service-page {
+  --service-surface: var(--tint);
+  --service-border: var(--line);
+  --service-photo-fit: cover;
+}
+.service-hero { background: var(--service-surface); }
+.service-hero > .shell { padding-block: 1rem 1.5rem; }
+.breadcrumbs { padding-block: .35rem 1rem; font-size: .76rem; }
+.breadcrumbs ol, .breadcrumbs li { display: flex; align-items: center; flex-wrap: wrap; column-gap: .55rem; }
+.breadcrumbs ol { row-gap: .2rem; }
+.breadcrumbs a { padding-block: .25rem; text-decoration: underline; text-underline-offset: .2em; }
+.breadcrumbs [aria-current] { font-weight: 600; }
+.service-hero-grid {
+  display: grid;
+  align-items: center;
+  gap: clamp(1.4rem, 3vw, 3.5rem);
+}
+.service-hero-copy { min-width: 0; animation: enter 360ms ease both; }
+.service-hero h1 { font-size: clamp(2.3rem, 1.45rem + 3.5vw, 5rem); letter-spacing: -.055em; margin-block: .75rem 1rem; text-wrap: balance; }
+.service-intro { max-width: 49ch; }
+.service-hero-actions { display: flex; flex-wrap: wrap; gap: .65rem 1.1rem; align-items: center; margin-top: 1.15rem; }
+.service-hero-photo {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  aspect-ratio: 1.42;
+  border-radius: 1rem 1rem 3rem 1rem;
+  background: var(--color-brand-light);
+}
+.service-hero-photo img { object-fit: var(--service-photo-fit); object-position: var(--service-photo-position, center); }
+.service-hero-photo[data-photo="aplicacao-blindagem"] img { object-fit: contain; padding: 1rem; }
+[data-photo="banner_limpeza_poltrona"] { --service-photo-position: 100% center; }
+.service-trust {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  min-height: 2.8rem;
+  margin-top: clamp(1rem, 2vw, 1.65rem);
+  padding-top: .55rem;
+  border-top: 1px solid var(--service-border);
+  font-size: .83rem;
+  font-weight: 600;
+}
+.service-benefit-grid { display: grid; gap: .75rem; }
+.service-benefit-grid article {
+  display: grid;
+  align-content: start;
+  gap: .65rem;
+  padding: clamp(1rem, 1rem + 1vw, 2rem);
+  border: 1px solid var(--line);
+  border-radius: .8rem;
+}
+.service-benefit-grid article:first-child { background: var(--tint); border-color: transparent; }
+.service-benefit-grid p, .process-steps p { font-size: .9rem; }
+.service-process { background: var(--color-brand-light); }
+.process-steps { display: grid; }
+.process-steps li {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: .35rem .9rem;
+  align-content: start;
+  position: relative;
+  padding-bottom: 1.3rem;
+}
+.process-steps li:not(:last-child)::before { position: absolute; inset: 2.5rem auto 0 1.2rem; width: 1px; content: ""; background: var(--color-brand-mid); }
+.step-number {
+  display: grid;
+  place-items: center;
+  position: relative;
+  grid-row: span 2;
+  align-self: start;
+  width: 2.5rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--color-brand);
+  font: 500 .82rem var(--font-heading);
+}
+.process-steps h3 { padding-top: .25rem; }
+.process-steps p { grid-column: 2; }
+.service-editorial { display: grid; align-items: center; gap: clamp(1.4rem, 4vw, 4.5rem); }
+.editorial-art { position: relative; aspect-ratio: 1.42; background: var(--tint); border-radius: 2.2rem .75rem; overflow: clip; }
+.editorial-art img { object-fit: contain; padding: clamp(.65rem, 2vw, 1.5rem); transition: scale 260ms ease; }
+.editorial-art:hover img { scale: 1.035; }
+.editorial-copy { display: grid; gap: 1rem; }
+.editorial-copy h2 { text-wrap: pretty; }
+
+.service-page[data-category="blindagem"] {
+  --service-surface: var(--color-brand-dark);
+  --service-border: color-mix(in srgb, white 28%, transparent);
+}
+[data-category="blindagem"] .service-hero { color: white; }
+[data-category="blindagem"] .service-hero .eyebrow, [data-category="blindagem"] .service-trust svg { color: var(--color-brand); }
+[data-category="blindagem"] .service-hero :focus-visible { outline-color: white; }
+[data-category="blindagem"] .service-hero-photo { border-radius: 3rem .75rem .75rem .75rem; }
+[data-category="blindagem"] .service-benefit-grid article:first-child { background: var(--color-brand-dark); color: white; }
+[data-category="blindagem"] .service-process { background: var(--tint); }
+
+[data-category="veiculos"] .service-hero { background: white; }
+[data-category="veiculos"] .service-hero-grid { gap: 1.1rem; }
+[data-category="veiculos"] .service-hero-photo { aspect-ratio: 2.05; border-radius: .8rem; }
+[data-category="veiculos"] .service-trust { margin-top: 1.15rem; }
+[data-category="veiculos"] .service-benefit-grid article { border-top: 3px solid var(--color-brand); }
+[data-category="veiculos"] .editorial-art { aspect-ratio: 1.8; border-radius: 1rem; }
+
+[data-category="couro"] .service-hero { background: var(--color-brand-light); }
+[data-category="couro"] .service-hero-photo { border-radius: 0 5rem 0 2rem; }
+[data-category="couro"] .service-process { background: var(--tint); }
+[data-category="couro"] .editorial-art { border-radius: .4rem 2.5rem; }
+[data-category="couro"] .service-benefit-grid article { border-radius: .3rem; }
+
+.service-gallery { background: var(--color-brand-light); }
+.comparison-grid { display: grid; gap: 1.2rem; }
+.comparison { min-width: 0; }
+.comparison figcaption { padding-top: .6rem; font-size: .85rem; font-weight: 600; }
+.comparison-frame { position: relative; isolation: isolate; border-radius: .8rem; overflow: hidden; background: var(--line); }
+.comparison-frame img { object-fit: cover; }
+.comparison-before { clip-path: inset(0 calc(100% - var(--position)) 0 0); }
+.comparison-label { position: absolute; top: .6rem; background: var(--color-brand-dark); color: white; border-radius: .35rem; padding: .3rem .55rem; font-size: .78rem; }
+.comparison-label-before { left: .6rem; }
+.comparison-label-after { right: .6rem; }
+.comparison-handle {
+  position: absolute;
+  z-index: 1;
+  left: var(--position);
+  inset-block: 0;
+  translate: -50% 0;
+  width: 3px;
+  display: grid;
+  place-items: center;
+  background: white;
+  color: var(--color-brand-dark);
+}
+.comparison-handle svg { position: absolute; box-sizing: content-box; padding: .55rem; background: white; border-radius: 50%; }
+.comparison-input { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; touch-action: pan-y; }
+.comparison-frame:focus-within { outline: 3px solid var(--color-brand-dark); outline-offset: 4px; }
+
+.service-faq { display: grid; gap: 1rem; }
+.service-faq .section-heading { align-content: start; margin-bottom: 0; }
+.faq-entries { display: grid; align-content: start; gap: .65rem; min-width: 0; }
+.faq-entries details { border: 1px solid var(--line); border-radius: .7rem; }
+.faq-entries summary { min-height: 3.5rem; padding: .75rem 1rem; font-weight: 600; font-size: .94rem; }
+.faq-entries summary:hover, .faq-entries details[open] summary { background: var(--tint); border-radius: .65rem; }
+.faq-entries details p { margin: .8rem 1rem 1rem; font-size: .91rem; }
+@supports (interpolate-size: allow-keywords) {
+  .faq-entries, .mobile-links { interpolate-size: allow-keywords; }
+  .faq-entries details::details-content, .mobile-links details::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition: block-size 240ms ease, content-visibility 240ms allow-discrete;
+  }
+  .faq-entries details[open]::details-content, .mobile-links details[open]::details-content { block-size: auto; }
+}
+
+.related-section { background: var(--color-brand-light); }
+.related-grid { display: grid; gap: .85rem; }
+.related-grid li { min-width: 0; }
+.related-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+  border-radius: .9rem;
+  border: 1px solid var(--line);
+  background: white;
+  transition: box-shadow 230ms ease;
+}
+.related-card:hover { box-shadow: 0 .35rem .95rem color-mix(in srgb, var(--color-brand-dark) 15%, transparent); }
+.related-photo { position: relative; aspect-ratio: 2.1; background: var(--tint); overflow: clip; }
+.related-photo img { object-fit: contain; padding: .55rem; transition: scale 240ms ease; }
+.related-card:hover img { scale: 1.04; }
+.related-title { display: flex; justify-content: space-between; align-items: center; gap: .5rem; flex: 1; min-height: 3.35rem; font: 500 1rem/1.25 var(--font-heading); padding: .8rem 1rem; }
+.service-cta { background: var(--color-brand); }
+.service-cta .button { background: var(--color-brand-dark); color: white; }
+.service-cta .button:hover { background: color-mix(in srgb, var(--color-brand-dark) 89%, black); }
+.service-cta h2 { margin-top: .5rem; }
+
+@media (min-width: 40rem) {
+  .related-grid, .service-benefit-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 48rem) {
+  .service-hero > .shell { padding-block: 1.25rem 1.9rem; }
+  .service-hero-grid { grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); }
+  .service-hero-copy { padding-block: 1rem; }
+  .service-hero h1 { text-wrap: pretty; }
+  .service-hero-photo { aspect-ratio: 1.28; }
+  [data-category="blindagem"] .service-hero-grid { grid-template-columns: minmax(0, 1fr) minmax(0, .9fr); }
+  [data-category="blindagem"] .service-hero-photo { order: -1; aspect-ratio: 1.2; }
+  [data-category="veiculos"] .service-hero-grid { grid-template-columns: 1fr; }
+  [data-category="veiculos"] .service-hero-copy { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: .45rem 2rem; align-items: end; }
+  [data-category="veiculos"] .service-hero h1 { grid-column: 1; grid-row: span 2; margin-block: .25rem; }
+  [data-category="veiculos"] .service-intro, [data-category="veiculos"] .service-hero-actions { grid-column: 2; }
+  [data-category="veiculos"] .service-hero-actions { margin-top: 0; }
+  [data-category="veiculos"] .service-hero-photo { aspect-ratio: 3.1; }
+  [data-category="couro"] .service-hero-grid { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); }
+  [data-category="couro"] .service-hero-photo { aspect-ratio: 1.54; }
+  .process-steps { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+  .process-steps li { display: flex; flex-direction: column; gap: .6rem; padding-bottom: 0; padding-right: .7rem; }
+  .process-steps li:not(:last-child)::before { inset: 1.2rem -1rem auto 2.5rem; height: 1px; width: auto; }
+  .service-editorial, .comparison-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  [data-category="blindagem"] .editorial-art, [data-category="couro"] .editorial-art { order: 1; }
+  .service-faq { grid-template-columns: minmax(0, .67fr) minmax(0, 1.33fr); gap: 2rem; }
+}
+@supports (animation-timeline: view()) {
+  .step-number, .editorial-copy {
+    animation: enter 300ms ease both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 40%;
+  }
+}

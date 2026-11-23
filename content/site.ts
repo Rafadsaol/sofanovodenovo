@@ -1,5 +1,10 @@
 export const officialSite = "https://sofanovodenovo.com.br";
-export const quoteUrl = `${officialSite}/redirecionador/`;
+export const officialQuoteUrl = `${officialSite}/redirecionador/`;
+export const quoteUrl = "/redirecionador/";
+
+export function serviceQuoteUrl(slug: string) {
+  return `${quoteUrl}?servico=${encodeURIComponent(slug)}`;
+}
 
 export const contact = {
   phone: "(41) 99665-0037",
@@ -15,8 +20,8 @@ export const contact = {
   ],
 };
 
-function service(label: string, path: string) {
-  return { label, url: `${officialSite}/${path}/` };
+function service<Slug extends string>(label: string, path: Slug) {
+  return { label, slug: path, url: `/${path}/` };
 }
 
 export const categories = [
@@ -91,3 +96,13 @@ export const clients = [
   ["ibis", "ibis"], ["Lojas MM", "lojas-mm"], ["Pestana", "pestana"],
   ["O Boticário", "boticario"], ["Slaviero", "slaviero"],
 ];
+
+export type ServiceSlug = (typeof categories)[number]["services"][number]["slug"];
+
+export const services = categories.flatMap(({ id, title, services }) =>
+  services.map((service) => ({ ...service, category: id, categoryTitle: title })),
+);
+
+export function findService(slug: string) {
+  return services.find((service) => service.slug === slug);
+}

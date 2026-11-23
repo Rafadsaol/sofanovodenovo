@@ -5,7 +5,10 @@ import "@fontsource-variable/lora";
 import "@fontsource/poppins/latin-300.css";
 import "@fontsource/poppins/latin-400.css";
 import "@fontsource/poppins/latin-600.css";
+import { Header } from "@/components/header";
+import { SiteFooter } from "@/components/site-footer";
 import "./globals.css";
+import "./service.css";
 
 export const metadata: Metadata = {
   title: "Sofá Novo de Novo | Higienização, limpeza e blindagem em Curitiba",
@@ -15,5 +18,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  return <html lang="pt-BR"><body>{children}</body></html>;
+  return <html lang="pt-BR"><body><Header />{children}<SiteFooter /></body></html>;
 }

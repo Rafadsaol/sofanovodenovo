@@ -1,88 +1,91 @@
 "use client";
 
 import Image from "next/image";
-import { ChevronDown, Menu, MessageCircle, X } from "lucide-react";
-import { useEffect, useRef, useState, type KeyboardEvent } from "react";
-import { categories, quoteUrl } from "@/content/site";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { ArrowRight, ChevronDown, Menu, MessageCircle, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { categories, findService, quoteUrl, serviceQuoteUrl } from "@/content/site";
+
+function Brand() {
+  return (
+    <Image src="/brand/logo.png" alt="Sofá Novo de Novo — início" width={120} height={56} preload />
+  );
+}
 
 export function Header() {
+  const pathname = usePathname();
+  const [expanded, setExpanded] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [category, setCategory] = useState<string | null>(null);
-  const [location, setLocation] = useState("");
-  const header = useRef<HTMLElement>(null);
-  const toggle = useRef<HTMLButtonElement>(null);
-  const categoryToggles = useRef<Record<string, HTMLButtonElement | null>>({});
-
-  function close() {
-    setCategory(null);
-    setMobileOpen(false);
-  }
+  const [hash, setHash] = useState("");
+  const desktopNav = useRef<HTMLElement>(null);
+  const mobileNav = useRef<HTMLDialogElement>(null);
+  const toggles = useRef<Record<string, HTMLButtonElement | null>>({});
+  const slug = pathname.split("/")[1];
+  const active = findService(slug);
+  const quote = active ? serviceQuoteUrl(active.slug) : quoteUrl;
 
   useEffect(() => {
-    function onOutsideClick(event: PointerEvent) {
-      if (!header.current?.contains(event.target as Node)) close();
+    function onPointerDown(event: PointerEvent) {
+      if (!desktopNav.current?.contains(event.target as Node)) setExpanded(null);
+    }
+    function updateHash() {
+      setHash(window.location.hash);
+    }
+    function onViewportChange(event: MediaQueryListEvent) {
+      if (event.matches) mobileNav.current?.close();
+      setExpanded(null);
     }
     const desktop = window.matchMedia("(min-width: 64rem)");
-    function updateLocation() {
-      setLocation(window.location.hash.slice(1));
-    }
-    updateLocation();
-    window.addEventListener("hashchange", updateLocation);
-    document.addEventListener("pointerdown", onOutsideClick);
-    desktop.addEventListener("change", close);
+    updateHash();
+    document.addEventListener("pointerdown", onPointerDown);
+    window.addEventListener("hashchange", updateHash);
+    desktop.addEventListener("change", onViewportChange);
     return () => {
-      document.removeEventListener("pointerdown", onOutsideClick);
-      desktop.removeEventListener("change", close);
-      window.removeEventListener("hashchange", updateLocation);
+      document.removeEventListener("pointerdown", onPointerDown);
+      window.removeEventListener("hashchange", updateHash);
+      desktop.removeEventListener("change", onViewportChange);
     };
-  }, []);
+  }, [pathname]);
 
-  function onKeyDown(event: KeyboardEvent<HTMLElement>) {
-    if (event.key !== "Escape") return;
-    if (category) {
-      setCategory(null);
-      categoryToggles.current[category]?.focus();
-    } else if (mobileOpen) {
-      setMobileOpen(false);
-      toggle.current?.focus();
-    } else {
-      return;
-    }
-    event.preventDefault();
+  function openMobile() {
+    mobileNav.current?.showModal();
+    setMobileOpen(true);
+  }
+
+  function closeMobile() {
+    mobileNav.current?.close();
   }
 
   return (
-    <header
-      className="header"
-      ref={header}
-      onKeyDown={onKeyDown}
-      onBlur={(event) => {
-        if (event.relatedTarget && !event.currentTarget.contains(event.relatedTarget)) close();
-      }}
-    >
-      <a className="skip-link" href="#conteudo" onClick={close}>Ir para o conteúdo</a>
+    <header className="header">
+      <a className="skip-link" href="#conteudo">Ir para o conteúdo</a>
       <div className="shell header-inner">
-        <a href="#inicio" onClick={close} className="brand-link">
-          <Image src="/brand/logo.png" alt="Sofá Novo de Novo" width={120} height={56} preload />
-        </a>
+        <Link href="/" className="brand-link"><Brand /></Link>
         <button
           className="menu-toggle"
           type="button"
-          ref={toggle}
           aria-expanded={mobileOpen}
-          aria-controls="navegacao"
-          aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}
-          onClick={() => mobileOpen ? close() : setMobileOpen(true)}
+          aria-controls="menu-mobile"
+          aria-haspopup="dialog"
+          aria-label="Abrir menu"
+          onClick={openMobile}
         >
-          {mobileOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+          <Menu aria-hidden="true" />
         </button>
         <nav
-          id="navegacao"
-          className="main-nav"
-          data-open={mobileOpen}
+          className="desktop-nav"
           aria-label="Navegação principal"
+          ref={desktopNav}
           onBlur={(event) => {
-            if (!mobileOpen && !event.currentTarget.contains(event.relatedTarget)) setCategory(null);
+            if (!event.currentTarget.contains(event.relatedTarget)) setExpanded(null);
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Escape" && expanded) {
+              toggles.current[expanded]?.focus();
+              setExpanded(null);
+              event.preventDefault();
+            }
           }}
         >
           <ul className="nav-list">
@@ -90,34 +93,75 @@ export function Header() {
               <li key={id} className="nav-entry">
                 <button
                   type="button"
-                  ref={(node) => { categoryToggles.current[id] = node; }}
-                  aria-expanded={category === id}
+                  ref={(node) => { toggles.current[id] = node; }}
+                  aria-expanded={expanded === id}
                   aria-controls={`menu-${id}`}
-                  data-active={location === id}
-                  onClick={() => setCategory(category === id ? null : id)}
+                  data-active={active?.category === id || (pathname === "/" && hash === `#${id}`)}
+                  onClick={() => setExpanded(expanded === id ? null : id)}
                 >
                   {title} <ChevronDown size={15} aria-hidden="true" />
                 </button>
-                <ul id={`menu-${id}`} className="dropdown" hidden={category !== id} inert={category !== id}>
-                  <li><a className="category-link" href={`#${id}`} aria-current={location === id ? "location" : undefined} onClick={close}>Ver categoria</a></li>
-                  {services.map(({ label, url }) => (
-                    <li key={url}><a href={url} onClick={close}>{label}</a></li>
-                  ))}
-                </ul>
+                <div id={`menu-${id}`} className="dropdown" hidden={expanded !== id} inert={expanded !== id}>
+                  <Link className="category-link" href={`/#${id}`} onClick={() => setExpanded(null)}>
+                    {title} <ArrowRight size={16} aria-hidden="true" />
+                  </Link>
+                  <ul className="dropdown-services">
+                    {services.map(({ label, url, slug }) => (
+                      <li key={slug}>
+                        <Link href={url} aria-current={active?.slug === slug ? "page" : undefined} onClick={() => setExpanded(null)}>{label}</Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </li>
             ))}
-            <li><a className="nav-about" href="#sobre" aria-current={location === "sobre" ? "location" : undefined} onClick={close}>Sobre nós</a></li>
-            <li className="nav-mobile-quote">
-              <a className="button button-primary" href={quoteUrl} onClick={close}>
-                <MessageCircle size={17} aria-hidden="true" /> Solicitar orçamento
-              </a>
-            </li>
+            <li><Link className="nav-about" href="/#sobre" aria-current={pathname === "/" && hash === "#sobre" ? "location" : undefined}>Sobre nós</Link></li>
           </ul>
         </nav>
-        <a className="button button-primary header-quote" href={quoteUrl} onClick={close}>
+        <a className="button button-primary header-quote" href={quote}>
           <MessageCircle size={17} aria-hidden="true" /> Pedir orçamento
         </a>
       </div>
+
+      <dialog
+        id="menu-mobile"
+        className="mobile-menu"
+        ref={mobileNav}
+        aria-label="Menu de navegação"
+        onClose={() => setMobileOpen(false)}
+        onClick={(event) => { if (event.target === event.currentTarget) closeMobile(); }}
+      >
+        {mobileOpen && (
+          <div className="mobile-panel">
+            <div className="mobile-heading">
+              <Link href="/" className="brand-link" onClick={closeMobile}><Brand /></Link>
+              <button className="menu-toggle" type="button" onClick={closeMobile} aria-label="Fechar menu" autoFocus>
+                <X aria-hidden="true" />
+              </button>
+            </div>
+            <nav aria-label="Navegação mobile" className="mobile-links">
+              {categories.map(({ id, title, services }) => (
+                <details key={id} name="categorias" open={active?.category === id || undefined}>
+                  <summary>{title} <ChevronDown size={18} aria-hidden="true" /></summary>
+                  <ul>
+                    {services.map(({ label, url, slug }) => (
+                      <li key={slug}>
+                        <Link href={url} aria-current={active?.slug === slug ? "page" : undefined} onClick={closeMobile}>{label}</Link>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              ))}
+              <Link className="mobile-about" href="/#sobre" onClick={closeMobile}>Sobre nós</Link>
+            </nav>
+            <div className="mobile-quote">
+              <a className="button button-primary" href={quote} onClick={closeMobile}>
+                <MessageCircle size={17} aria-hidden="true" /> Solicitar orçamento
+              </a>
+            </div>
+          </div>
+        )}
+      </dialog>
     </header>
   );
 }
